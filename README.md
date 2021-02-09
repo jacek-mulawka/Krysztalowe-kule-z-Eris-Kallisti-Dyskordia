@@ -9,5 +9,7 @@ A game of catching falling balls into the basket. It was written in Delphi using
 
 
 Powered by
+
 GLScene (http://glscene.sourceforge.net),
+
 Delphi (https://www.embarcadero.com/products/delphi).
