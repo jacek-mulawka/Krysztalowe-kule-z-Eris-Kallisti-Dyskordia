@@ -748,9 +748,9 @@ begin
 
           // Dynamiczne dodanie efektu.
           if Czy_Bonus_Negatywny( zt_kula_kryszta這wa.id_bonus ) then
-            TGLBThorFX(zt_kula_kryszta這wa.efekt_uchwyt.AddNewEffect(TGLBThorFX)).Manager := GLThorFXManager1
+            TGLBThorFX(zt_kula_kryszta這wa.efekt_uchwyt.AddNewEffect( TGLBThorFX )).Manager := GLThorFXManager1
           else//if Czy_Bonus_Negatywny( zt_kula_kryszta這wa.id_bonus ) then
-            TGLBFireFX(zt_kula_kryszta這wa.efekt_uchwyt.AddNewEffect(TGLBFireFX)).Manager := GLFireFXManager1;
+            TGLBFireFX(zt_kula_kryszta這wa.efekt_uchwyt.AddNewEffect( TGLBFireFX )).Manager := GLFireFXManager1;
 
           if zt_kula_kryszta這wa.id_bonus in [ b_Powi瘯szenie_Koszyka, b_Pomniejszenie_Koszyka ] then
             zt_kula_kryszta這wa.Scale.Y := 1.2;
@@ -777,8 +777,8 @@ begin
   //---//if Opcje__Bonusy_MenuItem.Checked then
 
 
-  //TGLBFireFX(zt_kula_kryszta這wa.efekt_uchwyt.AddNewEffect(TGLBFireFX)).Manager := GLFireFXManager1;
-  //TGLBThorFX(zt_kula_kryszta這wa.efekt_uchwyt.AddNewEffect(TGLBThorFX)).Manager := GLThorFXManager1;
+  //TGLBFireFX(zt_kula_kryszta這wa.efekt_uchwyt.AddNewEffect( TGLBFireFX )).Manager := GLFireFXManager1;
+  //TGLBThorFX(zt_kula_kryszta這wa.efekt_uchwyt.AddNewEffect( TGLBThorFX )).Manager := GLThorFXManager1;
 
   kule_kryszta這we_l.Add( zt_kula_kryszta這wa );
 
