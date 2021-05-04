@@ -13,6 +13,9 @@ begin
 
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  Application.CreateForm(TKrysztalowe_Kule_Form, Krysztalowe_Kule_Form);
-  Application.Run;
+  Application.HintHidePause := 30000;
+
+  Application.CreateForm( TKrysztalowe_Kule_Form, Krysztalowe_Kule_Form );
+  Application.Run();
+
 end.

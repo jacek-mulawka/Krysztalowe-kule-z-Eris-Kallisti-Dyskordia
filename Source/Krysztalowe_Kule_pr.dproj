@@ -29,10 +29,12 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
-        <VerInfo_Keys>CompanyName=Jacek Mulawka;FileDescription=Kryształowe kule z Eris Kallisti Dyskordia. MIT License.;FileVersion=1.0.0.0;InternalName=;LegalCopyright=Copyright (c) 2017 Jacek Mulawka;LegalTrademarks=;OriginalFilename=Kryształowe kule z Eris Kallisti Dyskordia;ProductName=Kryształowe kule z Eris Kallisti Dyskordia;ProductVersion=2021.2.7;Comments=j.mulawka@interia.pl https://github.com/jacek-mulawka;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
+        <VerInfo_Keys>CompanyName=Jacek Mulawka;FileDescription=Kryształowe kule z Eris Kallisti Dyskordia. MIT License.;FileVersion=1.0.0.0;InternalName=;LegalCopyright=Copyright (c) 2017 Jacek Mulawka;LegalTrademarks=;OriginalFilename=Kryształowe kule z Eris Kallisti Dyskordia;ProductName=Kryształowe kule z Eris Kallisti Dyskordia;ProductVersion=2021.5.3;Comments=j.mulawka@interia.pl https://github.com/jacek-mulawka;ProgramID=com.embarcadero.$(MSBuildProjectName)</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1045</VerInfo_Locale>
         <SanitizedProjectName>Krysztalowe_Kule_pr</SanitizedProjectName>
+        <DCC_ExeOutput>.</DCC_ExeOutput>
+        <DCC_DcuOutput>.\10_2\$(Platform)\$(Config)</DCC_DcuOutput>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <Icon_MainIcon>Karaoke_pr.ico</Icon_MainIcon>

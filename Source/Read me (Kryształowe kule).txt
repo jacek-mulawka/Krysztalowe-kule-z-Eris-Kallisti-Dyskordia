@@ -1,5 +1,5 @@
 Kryszta³owe kule z Eris Kallisti Dyskordia
-wersja 2021.02.07.
+wersja 2021.05.03.
 
 MIT License
 

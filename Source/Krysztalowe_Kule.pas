@@ -144,6 +144,7 @@ type
     Gra__Normalizuj_MenuItem: TMenuItem;
     Gra__Normalizuj_Odstêp_1_MenuItem: TMenuItem;
     Gra__Normalizuj_Odstêp_2_MenuItem: TMenuItem;
+    Logo_Image: TImage;
     procedure FormShow( Sender: TObject );
     procedure FormClose( Sender: TObject; var Action: TCloseAction );
     procedure FormResize( Sender: TObject );
