@@ -3,6 +3,8 @@
 Gra polegająca na łapaniu do koszyka spadających kul. Została napisana w Delphi z wykorzystaniem [GLScene](http://glscene.sourceforge.net).
 
 
+## English
+
 A game of catching falling balls into the basket. It was written in Delphi using [GLScene](http://glscene.sourceforge.net).
 
 
