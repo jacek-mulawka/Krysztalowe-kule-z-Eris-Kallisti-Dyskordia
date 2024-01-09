@@ -448,10 +448,10 @@ end;//---//Funckja WMExitSizeMove().
 //Funkcja Wczytaj_Ustawienia().
 procedure TKrysztalowe_Kule_Form.Wczytaj_Ustawienia();
 var
-  plik_ini : TIniFile;
+  plik_ini : System.IniFiles.TIniFile;
 begin
 
-  plik_ini := TIniFile.Create(  ExtractFilePath( Application.ExeName ) + 'Kryszta³owe kule.ini'  );
+  plik_ini := System.IniFiles.TIniFile.Create(  ExtractFilePath( Application.ExeName ) + 'Kryszta³owe kule.ini'  );
 
   if not plik_ini.ValueExists( 'Opcje', '3_Rzêdy' ) then
     plik_ini.WriteBool( 'Opcje', '3_Rzêdy', Opcje__Rzêdy_3_MenuItem.Checked )
@@ -519,7 +519,7 @@ end;//---//Funkcja Wczytaj_Ustawienia().
 //Funkcja Zapisz_Ustawienia().
 procedure TKrysztalowe_Kule_Form.Zapisz_Ustawienia( Sender : TObject );
 var
-  plik_ini : TIniFile;
+  plik_ini : System.IniFiles.TIniFile;
 begin
 
   moment_wciœniêcia_klawisza := IncSecond( Now() );
@@ -536,7 +536,7 @@ begin
   moment_wciœniêcia_klawisza := IncSecond( Now() );
 
 
-  plik_ini := TIniFile.Create(  ExtractFilePath( Application.ExeName ) + 'Kryszta³owe kule.ini'  );
+  plik_ini := System.IniFiles.TIniFile.Create(  ExtractFilePath( Application.ExeName ) + 'Kryszta³owe kule.ini'  );
 
   plik_ini.WriteBool( 'Opcje', '3_Rzêdy', Opcje__Rzêdy_3_MenuItem.Checked );
   plik_ini.WriteBool( 'Opcje', 'Odk³adaj_Kule_W_Tle', Opcje__Odk³adaj_Kule_W_Tle_MenuItem.Checked );

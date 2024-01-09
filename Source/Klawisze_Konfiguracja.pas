@@ -15,8 +15,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Mask, JvExMask, JvSpin, Vcl.StdCtrls,
-  System.IniFiles;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.Mask, JvExMask, JvSpin, Vcl.StdCtrls;
 
 type
   TKlawisze_Konfiguracja_Form = class( TForm )
@@ -74,6 +73,9 @@ var
 
 implementation
 
+uses
+  System.IniFiles;
+
 {$R *.dfm}
 
 
@@ -83,10 +85,10 @@ implementation
 //Funkcja Wczytaj_Ustawienia().
 procedure TKlawisze_Konfiguracja_Form.Wczytaj_Ustawienia();
 var
-  plik_ini : TIniFile;
+  plik_ini : System.IniFiles.TIniFile;
 begin
 
-  plik_ini := TIniFile.Create(  ExtractFilePath( Application.ExeName ) + 'Kryszta³owe kule - klawisze konfiguracja.ini'  );
+  plik_ini := System.IniFiles.TIniFile.Create(  ExtractFilePath( Application.ExeName ) + 'Kryszta³owe kule - klawisze konfiguracja.ini'  );
 
   if not plik_ini.ValueExists( 'Klawisze', 'lewo_góra' ) then
     plik_ini.WriteInteger(  'Klawisze', 'lewo_góra', Round( Lewo_Góra_JvSpinEdit.Value )  )
@@ -151,10 +153,10 @@ end;//---//Funkcja Wczytaj_Ustawienia().
 //Funkcja Zapisz_Ustawienia().
 procedure TKlawisze_Konfiguracja_Form.Zapisz_Ustawienia();
 var
-  plik_ini : TIniFile;
+  plik_ini : System.IniFiles.TIniFile;
 begin
 
-  plik_ini := TIniFile.Create(  ExtractFilePath( Application.ExeName ) + 'Kryszta³owe kule - klawisze konfiguracja.ini'  );
+  plik_ini := System.IniFiles.TIniFile.Create(  ExtractFilePath( Application.ExeName ) + 'Kryszta³owe kule - klawisze konfiguracja.ini'  );
 
   plik_ini.WriteInteger(  'Klawisze', 'lewo_góra', Round( Lewo_Góra_JvSpinEdit.Value )  );
   plik_ini.WriteInteger(  'Klawisze', 'lewo_œrodek', Round( Lewo_Œrodek_JvSpinEdit.Value )  );
