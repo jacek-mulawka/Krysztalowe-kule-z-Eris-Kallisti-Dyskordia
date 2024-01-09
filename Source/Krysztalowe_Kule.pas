@@ -11,18 +11,19 @@ unit Krysztalowe_Kule;{07.09.2017}
   //
 
 
-// Do zrobienia: nic.
+  // Wydanie 2.0.0.0 - aktualizacja GLScene z 1.6.0.7082 na 2.2 2023.
 
 interface
 
 uses
+  GLS.VectorTypes,
+
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Menus,
-  System.IniFiles, System.DateUtils, System.Math, Vcl.ComCtrls,
-  GLScene, GLObjects, GLCoordinates, GLCadencer, GLCrossPlatform, GLBaseClasses, GLWin32Viewer,
-  GLCollision, GLBitmapFont, GLWindowsFont, GLHUDObjects, GLSpaceText, GLFireFX,
-  GLVectorGeometry, GLGeomObjects, GLKeyboard, GLColor, GLState, GLThorFX,
-  GLSkydome;
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.Menus, Vcl.ComCtrls,
+
+  GLS.Scene, GLS.Objects, GLS.Coordinates, GLS.Cadencer, GLS.BaseClasses, GLS.SceneViewer,
+  GLS.Collision, GLS.BitmapFont, GLS.WindowsFont, GLS.HUDObjects, GLS.SpaceText,
+  GLS.FireFX, GLS.GeomObjects, GLS.ThorFX, GLS.SkyDome;
 
 const
   kula_kryszta³owa_promieñ = 0.08;
@@ -41,7 +42,7 @@ type
       : TGLSphere;
   public
     { Public declarations }
-    constructor Create( AOwner : TComponent; Rodzic : TGLBaseSceneObject; pozycja_wektor : TVector; rozmiar : single; nazwa : string; czy_obrócone : boolean );
+    constructor Create( AOwner : TComponent; Rodzic : TGLBaseSceneObject; pozycja_wektor : GLS.VectorTypes.TVector4f; rozmiar : single; nazwa : string; czy_obrócone : boolean );
     destructor Destroy(); override;
   end;
 
@@ -199,7 +200,7 @@ type
     koszyk_ograniczenie_górne,
     koszyk_ograniczenie_œrodkowe,
     koszyk_ograniczenie_dolne
-      : TVector;
+      : GLS.VectorTypes.TVector4f;
     window_state_kopia : TWindowState;
     k_lewo_góra,
     k_lewo_œrodek,
@@ -244,13 +245,22 @@ var
 implementation
 
 uses
+  System.DateUtils,
+  System.IniFiles,
+  System.Math,
+
+  GLS.Color,
+  GLS.Keyboard,
+  //GLS.State,
+  GLS.VectorGeometry,
+
   Klawisze_Konfiguracja;
 
 {$R *.dfm}
 
 
 //Konstruktor klasy TPodest.
-constructor TPodest.Create( AOwner : TComponent; Rodzic : TGLBaseSceneObject; pozycja_wektor : TVector; rozmiar : single; nazwa : string; czy_obrócone : boolean );
+constructor TPodest.Create( AOwner : TComponent; Rodzic : TGLBaseSceneObject; pozycja_wektor : GLS.VectorTypes.TVector4f; rozmiar : single; nazwa : string; czy_obrócone : boolean );
 begin
 
   //
@@ -286,7 +296,7 @@ begin
 
   Self.Deska := TGLCube.Create( AOwner );
   Self.Deska.Parent := Self;
-  Self.Deska.Position.AsVector := GLVectorGeometry.PointMake( 0, 0, 0 );
+  Self.Deska.Position.AsVector := GLS.VectorGeometry.PointMake( 0, 0, 0 );
   Self.Deska.CubeDepth := Self.CubeSize / 10;
   Self.Deska.CubeHeight := Self.CubeSize / 20;
   Self.Deska.CubeWidth := Self.CubeSize / 2;
@@ -325,7 +335,7 @@ begin
 
   //Self.Deska.Material.FrontProperties.Diffuse.Color := ConvertRGBColor(  [ Random( 255 ), Random( 255 ), Random( 255 ) ]  );
   //Self.Deska.Material.FrontProperties.Ambient.Color := ConvertRGBColor(  [ Random( 255 ), Random( 255 ), Random( 255 ) ]  );
-  Self.Deska.Material.FrontProperties.Diffuse.Color := clrDarkTurquoise;
+  Self.Deska.Material.FrontProperties.Diffuse.Color := GLS.Color.clrDarkTurquoise;
 
 end;//---//Konstruktor klasy TPodest.
 
@@ -590,13 +600,13 @@ begin
 
   // Lewo góra.
   //zt_podest := TPodest.Create( Application, GLScene1.Objects, Podest_Test__Kula_Start_GLSphere.Position.AsVector, 1 );
-  zt_podest := TPodest.Create(  Application, GLScene1.Objects, GLVectorGeometry.PointMake( -0.7, 0.7, 0 ), podest_rozmiar, 'Lewo_Góra', false  );
+  zt_podest := TPodest.Create(  Application, GLScene1.Objects, GLS.VectorGeometry.PointMake( -0.7, 0.7, 0 ), podest_rozmiar, 'Lewo_Góra', false  );
   koszyk_ograniczenie_górne := zt_podest.Kula_Pozycja_Koszyka.AbsolutePosition;
   podesty_l.Add( zt_podest );
   //Exit;//???
 
   // Lewo œrodek.
-  zt_podest := TPodest.Create(  Application, GLScene1.Objects, GLVectorGeometry.PointMake( -0.945, 0.35, 0 ), podest_rozmiar, 'Lewo_Œrodek', false  );
+  zt_podest := TPodest.Create(  Application, GLScene1.Objects, GLS.VectorGeometry.PointMake( -0.945, 0.35, 0 ), podest_rozmiar, 'Lewo_Œrodek', false  );
   koszyk_ograniczenie_œrodkowe := zt_podest.Kula_Pozycja_Koszyka.AbsolutePosition;
   podesty_l.Add( zt_podest );
 
@@ -605,7 +615,7 @@ begin
   if Opcje__Rzêdy_3_MenuItem.Checked then
     begin
 
-      zt_podest := TPodest.Create(  Application, GLScene1.Objects, GLVectorGeometry.PointMake( -1.2, 0, 0 ), podest_rozmiar, 'Lewo_Dó³', false  );
+      zt_podest := TPodest.Create(  Application, GLScene1.Objects, GLS.VectorGeometry.PointMake( -1.2, 0, 0 ), podest_rozmiar, 'Lewo_Dó³', false  );
       koszyk_ograniczenie_dolne := zt_podest.Kula_Pozycja_Koszyka.AbsolutePosition;
       podesty_l.Add( zt_podest );
 
@@ -615,18 +625,18 @@ begin
 
 
   // Prawo góra.
-  zt_podest := TPodest.Create(  Application, GLScene1.Objects, GLVectorGeometry.PointMake( 0.7, 0.7, 0 ), podest_rozmiar, 'Prawo_Góra', true  );
+  zt_podest := TPodest.Create(  Application, GLScene1.Objects, GLS.VectorGeometry.PointMake( 0.7, 0.7, 0 ), podest_rozmiar, 'Prawo_Góra', true  );
   podesty_l.Add( zt_podest );
 
   // Prawo œrodek.
-  zt_podest := TPodest.Create(  Application, GLScene1.Objects, GLVectorGeometry.PointMake( 0.945, 0.35, 0 ), podest_rozmiar, 'Prawo_Œrodek', true  );
+  zt_podest := TPodest.Create(  Application, GLScene1.Objects, GLS.VectorGeometry.PointMake( 0.945, 0.35, 0 ), podest_rozmiar, 'Prawo_Œrodek', true  );
   podesty_l.Add( zt_podest );
 
   // Prawo dó³.
   if Opcje__Rzêdy_3_MenuItem.Checked then
     begin
 
-      zt_podest := TPodest.Create(  Application, GLScene1.Objects, GLVectorGeometry.PointMake( 1.2, 0, 0 ), podest_rozmiar, 'Prawo_Dó³', true  );
+      zt_podest := TPodest.Create(  Application, GLScene1.Objects, GLS.VectorGeometry.PointMake( 1.2, 0, 0 ), podest_rozmiar, 'Prawo_Dó³', true  );
       podesty_l.Add( zt_podest );
 
     end;
@@ -762,14 +772,14 @@ begin
           //if zt_kula_kryszta³owa.id_bonus in [ b_Spowolnienie_Kul, b_Przyœpieszenie_Kul ] then
           //  zt_kula_kryszta³owa.Material.PolygonMode := TPolygonMode(2);
 
-          //zt_kula_kryszta³owa.Material.PolygonMode := GLState.pmLines; // uses GLState.
+          //zt_kula_kryszta³owa.Material.PolygonMode := GLS.State.pmLines;
 
           //zt_kula_kryszta³owa.Radius := zt_kula_kryszta³owa.Radius - 0.01;
-          //zt_kula_kryszta³owa.Material.FrontProperties.Ambient.Color := clrGreen;
-          //zt_kula_kryszta³owa.Material.FrontProperties.Diffuse.Color := clrGreen;
-          //zt_kula_kryszta³owa.Material.FrontProperties.Emission.Color := clrGreen;
+          //zt_kula_kryszta³owa.Material.FrontProperties.Ambient.Color := GLS.Color.clrGreen;
+          //zt_kula_kryszta³owa.Material.FrontProperties.Diffuse.Color := GLS.Color.clrGreen;
+          //zt_kula_kryszta³owa.Material.FrontProperties.Emission.Color := GLS.Color.clrGreen;
 
-          //zt_kula_kryszta³owa.Material.FrontProperties.Emission.Color := clrRed;
+          //zt_kula_kryszta³owa.Material.FrontProperties.Emission.Color := GLS.Color.clrRed;
 
         end;
       //---//if zti >= 9 then
@@ -1504,7 +1514,7 @@ begin
     end;
   //---//if    ( Sender <> nil ) (...)
 
-  //koszyk_cel := GLVectorGeometry.PointMake( -0.7, 0.7, 0 );
+  //koszyk_cel := GLS.VectorGeometry.PointMake( -0.7, 0.7, 0 );
 
 end;//---//Przycisk_ButtonMouseEnter().
 
@@ -1541,7 +1551,7 @@ begin
 
   Wyniki_Wypisz();
 
-  koszyk_cel := GLVectorGeometry.PointMake( 0, 0, 0 );
+  koszyk_cel := GLS.VectorGeometry.PointMake( 0, 0, 0 );
   Koszyk_GLDummyCube.Position.SetPoint( 0, 0, 0 );
   Koszyk_GLDummyCube.Scale.Z := 1;
 
@@ -1948,10 +1958,10 @@ procedure TKrysztalowe_Kule_Form.GLCollisionManager1Collision( Sender: TObject; 
       and ( not Pauza_MenuItem.Checked ) then
       begin
 
-        //if not VectorEquals( TKula_Kryszta³owa(object2).Material.FrontProperties.Emission.Color, clrRed ) then // uses GLVectorGeometry.
-        //  TKula_Kryszta³owa(object2).Material.FrontProperties.Emission.Color := clrRed // uses GLColor.
-        //else//if not VectorEquals( TGLTorus(object2).Material.FrontProperties.Emission.Color, clrRed ) then
-        //  TKula_Kryszta³owa(object2).Material.FrontProperties.Emission.Color := clrYellowGreen;
+        //if not GLS.VectorGeometry.VectorEquals( TKula_Kryszta³owa(object2).Material.FrontProperties.Emission.Color, GLS.Color.clrRed ) then
+        //  TKula_Kryszta³owa(object2).Material.FrontProperties.Emission.Color := GLS.Color.clrRed
+        //else//if not GLS.VectorGeometry.VectorEquals( TGLTorus(object2).Material.FrontProperties.Emission.Color, GLS.Color.clrRed ) then
+        //  TKula_Kryszta³owa(object2).Material.FrontProperties.Emission.Color := GLS.Color.clrYellowGreen;
 
 
         //Od³¹cz_Pocisk( TKula_Kryszta³owa(object_1_f) );
@@ -2084,35 +2094,35 @@ procedure TKrysztalowe_Kule_Form.GLCadencer1Progress( Sender: TObject; const del
 
     Exit; // Nieu¿ywane.
 
-    if    (  IsKeyDown( 'N' )  )
-      and ( IsKeyDown( VK_CONTROL )  ) then
+    if    (  GLS.Keyboard.IsKeyDown( 'N' )  )
+      and ( GLS.Keyboard.IsKeyDown( VK_CONTROL )  ) then
       Gra__Nowa_MenuItemClick( Sender );
 
 
-    if   (  IsKeyDown( VK_NUMPAD7 )  ) // uses GLKeyboard.
-      or (  IsKeyDown( VK_NUMPAD8 )  ) then
+    if   (  GLS.Keyboard.IsKeyDown( VK_NUMPAD7 )  )
+      or (  GLS.Keyboard.IsKeyDown( VK_NUMPAD8 )  ) then
       Przycisk_ButtonMouseEnter( Lewo_Góra_Button );
 
-    if   (  IsKeyDown( VK_NUMPAD4 )  )
-      or (  IsKeyDown( VK_NUMPAD5 )  ) then
+    if   (  GLS.Keyboard.IsKeyDown( VK_NUMPAD4 )  )
+      or (  GLS.Keyboard.IsKeyDown( VK_NUMPAD5 )  ) then
       Przycisk_ButtonMouseEnter( Lewo_Œrodek_Button );
 
-    if   (  IsKeyDown( VK_NUMPAD1 )  )
-      or (  IsKeyDown( VK_NUMPAD2 )  ) then
+    if   (  GLS.Keyboard.IsKeyDown( VK_NUMPAD1 )  )
+      or (  GLS.Keyboard.IsKeyDown( VK_NUMPAD2 )  ) then
       Przycisk_ButtonMouseEnter( Lewo_Dó³_Button );
 
 
-    if IsKeyDown( VK_NUMPAD9 ) then
+    if GLS.Keyboard.IsKeyDown( VK_NUMPAD9 ) then
       Przycisk_ButtonMouseEnter( Prawo_Góra_Button );
 
-    if IsKeyDown( VK_NUMPAD6 ) then
+    if GLS.Keyboard.IsKeyDown( VK_NUMPAD6 ) then
       Przycisk_ButtonMouseEnter( Prawo_Œrodek_Button );
 
-    if IsKeyDown( VK_NUMPAD3 ) then
+    if GLS.Keyboard.IsKeyDown( VK_NUMPAD3 ) then
       Przycisk_ButtonMouseEnter( Prawo_Dó³_Button );
 
 
-    if IsKeyDown( 'P' ) then
+    if GLS.Keyboard.IsKeyDown( 'P' ) then
       begin
 
         if MilliSecondsBetween( Now(), moment_wciœniêcia_klawisza ) >= moment_wciœniêcia_klawisza_opóŸnienie_c then
@@ -2128,10 +2138,10 @@ procedure TKrysztalowe_Kule_Form.GLCadencer1Progress( Sender: TObject; const del
         //---//if MilliSecondsBetween( Now(), moment_wciœniêcia_klawisza ) >= moment_wciœniêcia_klawisza_opóŸnienie_c then
 
       end;
-    //---//if IsKeyDown( 'P' ) then
+    //---//if GLS.Keyboard.IsKeyDown( 'P' ) then
 
 
-    if IsKeyDown( VK_RETURN ) then
+    if GLS.Keyboard.IsKeyDown( VK_RETURN ) then
       begin
 
         if    ( Now() > moment_wciœniêcia_klawisza ) // Enter jako potwierdzenie komunikatu, te¿ jest ³apane jako naciœniêcie klawisza.
@@ -2148,9 +2158,9 @@ procedure TKrysztalowe_Kule_Form.GLCadencer1Progress( Sender: TObject; const del
         //---//if    ( Now() > moment_wciœniêcia_klawisza ) (...)
 
       end;
-    //---//if IsKeyDown( VK_RETURN ) then
+    //---//if GLS.Keyboard.IsKeyDown( VK_RETURN ) then
 
-    if IsKeyDown( VK_ESCAPE ) then
+    if GLS.Keyboard.IsKeyDown( VK_ESCAPE ) then
       begin
 
         if MilliSecondsBetween( Now(), moment_wciœniêcia_klawisza ) >= moment_wciœniêcia_klawisza_opóŸnienie_c then
@@ -2166,7 +2176,7 @@ procedure TKrysztalowe_Kule_Form.GLCadencer1Progress( Sender: TObject; const del
         //---//if MilliSecondsBetween( Now(), moment_wciœniêcia_klawisza ) >= moment_wciœniêcia_klawisza_opóŸnienie_c then
 
       end;
-    //---//if IsKeyDown( VK_ESCAPE ) then
+    //---//if GLS.Keyboard.IsKeyDown( VK_ESCAPE ) then
 
       //GLCamera1.Move( d );
 
@@ -2176,21 +2186,21 @@ procedure TKrysztalowe_Kule_Form.GLCadencer1Progress( Sender: TObject; const del
   procedure Klawisze_Obs³uga( d : double );
   begin
 
-    if    (  IsKeyDown( 'N' )  )
-      and ( IsKeyDown( VK_CONTROL )  ) then
+    if    (  GLS.Keyboard.IsKeyDown( 'N' )  )
+      and ( GLS.Keyboard.IsKeyDown( VK_CONTROL )  ) then
       Gra__Nowa_MenuItemClick( Sender );
 
 
     if    (
                 ( not klawisze_konfiguracja_korzystaj)
             and (
-                     (  IsKeyDown( VK_NUMPAD7 )  )  // uses GLKeyboard.
-                  or (  IsKeyDown( VK_NUMPAD8 )  )
+                     (  GLS.Keyboard.IsKeyDown( VK_NUMPAD7 )  )
+                  or (  GLS.Keyboard.IsKeyDown( VK_NUMPAD8 )  )
                 )
           )
        or (
                 ( klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( k_lewo_góra )
+            and GLS.Keyboard.IsKeyDown( k_lewo_góra )
           )
       then
       Przycisk_ButtonMouseEnter( Lewo_Góra_Button );
@@ -2198,13 +2208,13 @@ procedure TKrysztalowe_Kule_Form.GLCadencer1Progress( Sender: TObject; const del
     if    (
                 ( not klawisze_konfiguracja_korzystaj)
             and (
-                     (  IsKeyDown( VK_NUMPAD4 )  )
-                  or (  IsKeyDown( VK_NUMPAD5 )  )
+                     (  GLS.Keyboard.IsKeyDown( VK_NUMPAD4 )  )
+                  or (  GLS.Keyboard.IsKeyDown( VK_NUMPAD5 )  )
                 )
           )
        or (
                 ( klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( k_lewo_œrodek )
+            and GLS.Keyboard.IsKeyDown( k_lewo_œrodek )
           )
       then
       Przycisk_ButtonMouseEnter( Lewo_Œrodek_Button );
@@ -2213,13 +2223,13 @@ procedure TKrysztalowe_Kule_Form.GLCadencer1Progress( Sender: TObject; const del
     if    (
                 ( not klawisze_konfiguracja_korzystaj)
             and (
-                     (  IsKeyDown( VK_NUMPAD1 )  )
-                  or (  IsKeyDown( VK_NUMPAD2 )  )
+                     (  GLS.Keyboard.IsKeyDown( VK_NUMPAD1 )  )
+                  or (  GLS.Keyboard.IsKeyDown( VK_NUMPAD2 )  )
                 )
           )
        or (
                 ( klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( k_lewo_dó³ )
+            and GLS.Keyboard.IsKeyDown( k_lewo_dó³ )
           )
       then
       Przycisk_ButtonMouseEnter( Lewo_Dó³_Button );
@@ -2227,22 +2237,22 @@ procedure TKrysztalowe_Kule_Form.GLCadencer1Progress( Sender: TObject; const del
 
     if    (
                 ( not klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( VK_NUMPAD9 )
+            and GLS.Keyboard.IsKeyDown( VK_NUMPAD9 )
           )
        or (
                 ( klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( k_prawo_góra )
+            and GLS.Keyboard.IsKeyDown( k_prawo_góra )
           )
       then
       Przycisk_ButtonMouseEnter( Prawo_Góra_Button );
 
     if    (
                 ( not klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( VK_NUMPAD6 )
+            and GLS.Keyboard.IsKeyDown( VK_NUMPAD6 )
           )
        or (
                 ( klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( k_prawo_œrodek )
+            and GLS.Keyboard.IsKeyDown( k_prawo_œrodek )
           )
       then
       Przycisk_ButtonMouseEnter( Prawo_Œrodek_Button );
@@ -2250,11 +2260,11 @@ procedure TKrysztalowe_Kule_Form.GLCadencer1Progress( Sender: TObject; const del
 
     if    (
                 ( not klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( VK_NUMPAD3 )
+            and GLS.Keyboard.IsKeyDown( VK_NUMPAD3 )
           )
        or (
                 ( klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( k_prawo_dó³ )
+            and GLS.Keyboard.IsKeyDown( k_prawo_dó³ )
           )
       then
       Przycisk_ButtonMouseEnter( Prawo_Dó³_Button );
@@ -2262,11 +2272,11 @@ procedure TKrysztalowe_Kule_Form.GLCadencer1Progress( Sender: TObject; const del
 
     if    (
                 ( not klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( 'P' )
+            and GLS.Keyboard.IsKeyDown( 'P' )
           )
        or (
                 ( klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( k_pauza )
+            and GLS.Keyboard.IsKeyDown( k_pauza )
           )
       then
       begin
@@ -2284,16 +2294,16 @@ procedure TKrysztalowe_Kule_Form.GLCadencer1Progress( Sender: TObject; const del
         //---//if MilliSecondsBetween( Now(), moment_wciœniêcia_klawisza ) >= moment_wciœniêcia_klawisza_opóŸnienie_c then
 
       end;
-    //---//if IsKeyDown( 'P' ) then
+    //---//if GLS.Keyboard.IsKeyDown( 'P' ) then
 
 
     if    (
                 ( not klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( VK_RETURN )
+            and GLS.Keyboard.IsKeyDown( VK_RETURN )
           )
        or (
                 ( klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( k_pe³ny_ekran )
+            and GLS.Keyboard.IsKeyDown( k_pe³ny_ekran )
           )
       then
       begin
@@ -2312,16 +2322,16 @@ procedure TKrysztalowe_Kule_Form.GLCadencer1Progress( Sender: TObject; const del
         //---//if    ( Now() > moment_wciœniêcia_klawisza ) (...)
 
       end;
-    //---//if IsKeyDown( VK_RETURN ) then
+    //---//if GLS.Keyboard.IsKeyDown( VK_RETURN ) then
 
 
     if    (
                 ( not klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( VK_ESCAPE )
+            and GLS.Keyboard.IsKeyDown( VK_ESCAPE )
           )
        or (
                 ( klawisze_konfiguracja_korzystaj)
-            and IsKeyDown( k_zamknij )
+            and GLS.Keyboard.IsKeyDown( k_zamknij )
           )
       then
       begin
@@ -2339,7 +2349,7 @@ procedure TKrysztalowe_Kule_Form.GLCadencer1Progress( Sender: TObject; const del
         //---//if MilliSecondsBetween( Now(), moment_wciœniêcia_klawisza ) >= moment_wciœniêcia_klawisza_opóŸnienie_c then
 
       end;
-    //---//if IsKeyDown( VK_ESCAPE ) then
+    //---//if GLS.Keyboard.IsKeyDown( VK_ESCAPE ) then
 
   end;//---//Funkcja Klawisze_Obs³uga() w GLCadencer1Progress().
 

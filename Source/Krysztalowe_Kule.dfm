@@ -261,17 +261,17 @@
       Height = 149
       Align = alClient
       Caption = 
-        'Kryszta'#322'owe kule z Eris Kallisti Dyskordia'#13#10'wersja 2021.05.03.'#13#10 +
-        #13#10'MIT License'#13#10#13#10'Copyright (c) 2017 Jacek Mulawka'#13#10#13#10'j.mulawka@i' +
-        'nteria.pl'#13#10#13#10'https://github.com/jacek-mulawka'#13#10#13#10#13#10'Program jest ' +
-        'darmowy, udost'#281'pniony w postaci takiej jakiej jest wraz ze wszys' +
-        'tkimi b'#322#281'dami. U'#380'ytkownik zyskuje dost'#281'p do programu, u'#380'ywa prog' +
-        'ramu na w'#322'asne ryzyko i ponosi wy'#322#261'czn'#261' odpowiedzialno'#347#263' za wsze' +
-        'lkie szkody (w'#322'asne i niew'#322'asne) materialne i niematerialne oraz' +
-        ' utrat'#281' danych w zwi'#261'zku z u'#380'ywaniem programu.'
+        'Kryszta'#322'owe kule z Eris Kallisti Dyskordia'#13#10'wydanie 2.0.0.0'#13#10'wer' +
+        'sja 2024.01.08.'#13#10#13#10'MIT License'#13#10#13#10'Copyright (c) 2017 Jacek Mulaw' +
+        'ka'#13#10#13#10'j.mulawka@interia.pl'#13#10#13#10'https://github.com/jacek-mulawka'#13#10 +
+        #13#10#13#10'Program jest darmowy, udost'#281'pniony w postaci takiej jakiej j' +
+        'est wraz ze wszystkimi b'#322#281'dami. U'#380'ytkownik zyskuje dost'#281'p do pro' +
+        'gramu, u'#380'ywa programu na w'#322'asne ryzyko i ponosi wy'#322#261'czn'#261' odpowie' +
+        'dzialno'#347#263' za wszelkie szkody (w'#322'asne i niew'#322'asne) materialne i n' +
+        'iematerialne oraz utrat'#281' danych w zwi'#261'zku z u'#380'ywaniem programu.'
       WordWrap = True
       ExplicitWidth = 578
-      ExplicitHeight = 195
+      ExplicitHeight = 208
     end
     object Logo_Image: TImage
       Left = 540
@@ -4591,6 +4591,7 @@
       Height = 100
       Camera = GLCamera1
       FieldOfView = 90.000000000000000000
+      PenAsTouch = False
       Anchors = [akLeft, akTop, akRight, akBottom]
       OnMouseMove = GLSceneViewer1MouseMove
       TabOrder = 0
@@ -4907,7 +4908,7 @@
     InnerColor.Color = {00000000F8FEFE3E0000803F0000803F}
     OuterColor.Color = {EBE0E03EE4DB5B3FE4DB5B3F0000803F}
     FireDensity = 0.300000011920929000
-    FireEvaporation = 0.860000014305114800
+    FireEvaporation = 0.860000014305114700
     FireCrown = 0.100000001490116100
     ParticleLife = 1
     FireBurst = 0.001000000047497451
@@ -4923,7 +4924,7 @@
     Target.Coordinates = {00000000000000000000000000000000}
     Cadencer = GLCadencer1
     Maxpoints = 2
-    GlowSize = 0.090000003576278680
+    GlowSize = 0.090000003576278690
     Vibrate = 0.009999999776482582
     InnerColor.Color = {00000000000000000000000000000000}
     OuterColor.Color = {0000803F00000000000000000000803F}
